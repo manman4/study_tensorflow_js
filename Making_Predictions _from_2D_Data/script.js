@@ -101,14 +101,6 @@ async function run() {
           activation: 'softplus'
     }));
 
-      // 出力層を追加
-      model.add(tf.layers.dense({
-          // ユニット（別名：ノード）は１個だけ
-          units: 1,
-          // y=Σ(wx)+b となる定数項bであるバイアスを使用する
-          useBias: true
-      }));
-
       return model;
 
   }
