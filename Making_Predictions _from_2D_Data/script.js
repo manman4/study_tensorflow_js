@@ -248,7 +248,6 @@ async function run() {
   // モデルのテスト（testModelは下で関数として定義）
   testModel(model, data, tensorData);
 
-
   function testModel(model, inputData, normalizationData) {
 
       const {inputMax, inputMin, labelMin, labelMax} = normalizationData;  
