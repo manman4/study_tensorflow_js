@@ -83,7 +83,23 @@ async function run() {
           useBias: true
       }));
 
-      // ここに中間層を追加した場合にはどうなるのかは別途に言及する
+      // ここに中間層を追加し回帰曲線に急激な曲がりを加えられるようにすることを可能にする
+      model.add(tf.layers.dense({
+          // ユニット（別名：ノード）は16個
+          units: 16,
+          // y=Σ(wx)+b となる定数項bであるバイアスを使用する
+          useBias: true
+      }));
+
+      // 出力層を追加
+      model.add(tf.layers.dense({
+          // ユニット（別名：ノード）は１個だけ
+          units: 1,
+          // y=Σ(wx)+b となる定数項bであるバイアスを使用する
+          useBias: true,
+          // 出力を線形にしないために非線形活性化関数を被せる（データに対してsoftplusが最適）
+          activation: 'softplus'
+    }));
 
       // 出力層を追加
       model.add(tf.layers.dense({
@@ -184,24 +200,6 @@ async function run() {
 
   // モデル・入力（インプット）テンソル・出力（ラベル）テンソルを指定してモデルの学習を行う関数
   async function trainModel(model, inputs, labels) {
-
-    // ここに中間層を追加し回帰曲線に急激な曲がりを加えられるようにすることを可能にする
-    model.add(tf.layers.dense({
-        // ユニット（別名：ノード）は16個
-        units: 16,
-        // y=Σ(wx)+b となる定数項bであるバイアスを使用する
-        useBias: true
-    }));
-
-    // 出力層を追加
-    model.add(tf.layers.dense({
-        // ユニット（別名：ノード）は１個だけ
-        units: 1,
-        // y=Σ(wx)+b となる定数項bであるバイアスを使用する
-        useBias: true,
-        // 出力を線形にしないために非線形活性化関数を被せる（データに対してsoftplusが最適）
-        activation: 'softplus'
-    }));
 
       // 学習実行のため、学習方法を指定してモデルをコンパイル  
       model.compile({
